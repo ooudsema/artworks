@@ -8,21 +8,21 @@ This project uses the Tate Collection dataset that is available on [Github] (htt
 
 This dataset consists of metadata and image thumbnails for approximately 70,000 works of art owned by the Tate Gallery, and about 3,500 artists.  This project uses the following three files from the Tate's Github dataset: 
 
-*artwork_data.csv with the following headings: id, accession number, artist, artistRole, artistId, title, dateText, medium, creditLine, year, acquisitionYear, dimensions, width, height, depth, units, inscription, thumbnailCopyright, thumbnailUrl, and url
+* artwork_data.csv with the following headings: id, accession number, artist, artistRole, artistId, title, dateText, medium, creditLine, year, acquisitionYear, dimensions, width, height, depth, units, inscription, thumbnailCopyright, thumbnailUrl, and url
 
-*artist_data.csv
+* artist_data.csv
 
 * artists json files 
 
 ## Data model
 
-![Artworks Data Model](https://github.com/ooudsema/artworks/static/img/artworksModel.png "Artworks Model")
+![Artworks Data Model](https://github.com/ooudsema/artworks/static/artworksModel.png "Artworks Model")
 
 ## Package Dependencies
 
 This app uses the following python packages: 
 
-'''python
+```python
 
 certifi                        2018.10.15
 chardet                        3.0.4
@@ -51,4 +51,4 @@ social-auth-core               2.0.0
 urllib3                        1.24.1
 wheel                          0.32.0
 
-'''
+```
