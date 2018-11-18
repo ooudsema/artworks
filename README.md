@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This project uses the Tate Collection dataset that is available on [Github] (https://github.com/tategallery/collection). It uses Django to create display the artworks and their artists of the Tate in a way that users can browse or filter, by artwork, artists, or subject of the work. 
+This project uses the Tate Collection dataset that is available on [Github](https://github.com/tategallery/collection). It uses Django to create display the artworks and their artists of the Tate in a way that users can browse or filter, by artwork, artists, or subject of the work. 
 
 ## Data set
 
@@ -16,7 +16,7 @@ This dataset consists of metadata and image thumbnails for approximately 70,000 
 
 ## Data model
 
-![Artworks Data Model](https://github.com/ooudsema/artworks/static/artworksModel.png "Artworks Model")
+![Artworks Data Model](https://github.com/ooudsema/artworks/blob/master/static/artworksModel.png "Artworks Model")
 
 ## Package Dependencies
 
