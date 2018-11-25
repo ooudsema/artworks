@@ -16,7 +16,7 @@ This dataset consists of metadata and image thumbnails for approximately 70,000 
 
 ## Data model
 
-![Artworks Data Model](https://github.com/ooudsema/artworks/blob/master/static/artworksModel.png "Artworks Model")
+![Artworks Data Model](https://github.com/ooudsema/artworks/blob/master/static/artworkModel.png "Artworks Model")
 
 ## Package Dependencies
 
