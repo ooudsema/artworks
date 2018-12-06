@@ -1,4 +1,5 @@
 venv
-ooudsema-china_heritage_sites.txt
 __pycache__
 secrets.py
+config
+artworks.yaml
