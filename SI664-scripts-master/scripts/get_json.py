@@ -43,7 +43,7 @@ for each in files:
 				for sub in item['children']:
 					subjects.append(sub['name'])
 					if sub['name'] not in subjectlist:
-						subjectlist.append(sub['name'])
+						subjectlist.append(sub['name'].replace(",", ""))
 	except:
 		subjects = []
 
@@ -58,6 +58,6 @@ for each in files:
 subject = []
 for each in subjectlist:
 	if each not in subject:
-		subject.append(each)
+		subject.append(each.replace(",",""))
 for each in subject:
 	subject_writer.writerow([each])

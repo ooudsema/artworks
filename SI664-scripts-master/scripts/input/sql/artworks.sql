@@ -1,5 +1,5 @@
 SET FOREIGN_KEY_CHECKS=0;
-DROP TABLE IF EXISTS era, medium, movement, artwork, artwork_subject, subject, artist, country, temp_art, temp_json;
+DROP TABLE IF EXISTS era, medium, movement, artwork, artwork_subject, subject, artist, country, temp_art, temp_json, subject_list;
 SET FOREIGN_KEY_CHECKS=1;
 
 
@@ -187,7 +187,7 @@ ENGINE=InnoDB
 CHARACTER SET latin1
 COLLATE latin1_swedish_ci;
 
-LOAD DATA LOCAL INFILE '/Users/USER/Desktop/artworks/SI664-scripts-master/scripts/artworksjson_cleaned.csv'
+LOAD DATA LOCAL INFILE '/Users/USER/Desktop/artworks/SI664-scripts-master/scripts/artworksjson_new.csv'
 INTO TABLE temp_json
 CHARACTER SET latin1
 FIELDS TERMINATED BY ','
@@ -241,20 +241,19 @@ INSERT IGNORE INTO numbers (num) VALUES
   (1), (2), (3), (4), (5), (6), (7), (8), (9), (10), (11), (12), (13), (14), (15), (16), (17), (18), (19), (20), (21), (22), (23), (24), (25), (26), (27), (28);
 
 -- Create temporary table to store split out states.
-CREATE TEMPORARY TABLE subject_list
+CREATE TABLE subject_list
   (
     id INTEGER NOT NULL AUTO_INCREMENT UNIQUE,
+    accession_number VARCHAR(100) NOT NULL,
     subject_name VARCHAR(255) NOT NULL,
-    artwork_name VARCHAR(500) NOT NULL,
     PRIMARY KEY (id)
   )
 ENGINE=InnoDB
 CHARACTER SET utf8mb4
 COLLATE utf8mb4_0900_ai_ci;
 
--- This query splits the states and inserts them into the target temp table.
-INSERT IGNORE INTO subject_list (subject_name, artwork_name)
-SELECT temp_json.title,
+INSERT IGNORE INTO subject_list (accession_number, subject_name)
+SELECT temp_json.accession_number,
        SUBSTRING_INDEX(SUBSTRING_INDEX(temp_json.subject, ',', numbers.num), ',', -1)
        AS subject_name
   FROM numbers
@@ -264,15 +263,12 @@ SELECT temp_json.title,
                   >= numbers.num - 1
  ORDER BY temp_json.temp_json_id, numbers.num;
 
-DROP TEMPORARY TABLE numbers;
-
--- Insert UNESCO heritage sites linked to multiple states in junction table.
 INSERT IGNORE INTO artwork_subject (artwork_id, subject_id)
 SELECT artwork.artwork_id,
        subject.subject_id
   FROM subject_list
        LEFT JOIN artwork
-              ON subject_list.artwork_name = artwork.artwork_title
+              ON TRIM(subject_list.accession_number) = TRIM(artwork.accession_number)
        LEFT JOIN subject
-              ON subject_list.subject_name = subject.subject_name
+              ON TRIM(subject_list.subject_name) = TRIM(subject.subject_name)
  ORDER BY subject_list.id;
