@@ -1,0 +1,31 @@
+{% extends 'artworks/base.html' %}
+{% block content %}
+{% if user.is_authenticated %}
+
+<article>
+  <header>
+    <h2>Subjects</h2>
+  </header>
+
+{% include 'artworks/pagination.html' %}
+
+ {% if subjects %}
+  <ul>
+
+    {% for subject in subjects %}
+    <!-- safe filter on for raw HTML stored in database -->
+    <li><a href="{% url 'subject_detail' subject.pk %}">{{subject.subject_name | safe }}</a></li>
+    {% endfor %}
+
+  </ul>
+  {% else %}
+  <p>No Subjects are available to view.</p>
+  {% endif %}
+
+  <p>page count: {{ subjects.count | safe }}</p>
+</article>
+
+  {% else %}
+    <a href="{% url 'login' %}">Log in</a>
+  {% endif %}
+{% endblock content %}}

@@ -1,0 +1,103 @@
+{% extends 'artworks/base.html' %}
+  
+   
+   <!-- safe filter on for raw HTML stored in database -->
+   {% block content %}
+     <header>
+       <div class="row">
+         <div class="col-sm-10">
+           <h2>{{ art.artwork_title | safe }}</h2>
+         </div>
+         <div class="col-xs-1">
+           {% if user.is_authenticated %}
+             <a class="btn btn-outline-secondary" href="{% url 'art_update' art.pk %}">edit</a>
+           {% endif %}
+         </div>
+         <div class="col-xs-1">
+           {% if user.is_authenticated %}
+             &nbsp;<a class="btn btn-outline-warning" href="{% url 'art_delete' art.pk %}">delete</a>
+           {% endif %}
+         </div>
+       </div>
+     </header>
+   
+
+  {% if art.accession_number %}
+    <div class="row">
+      <div class="col-sm-2">
+        <p>Accession Number</p>
+      </div>
+      <div class="col-sm-10">
+        <p>{{ art.accession_number}}</p>
+      </div>
+    </div>
+  {% endif %}
+
+  {% if art.artwork_date %}
+    <div class="row">
+      <div class="col-sm-2">
+        <p>Date</p>
+      </div>
+      <div class="col-sm-10">
+        <p>{{ art.artwork_date }}</p>
+      </div>
+    </div>
+  {% endif %}
+
+  {% if art.era %}
+    <div class="row">
+      <div class="col-sm-2">
+        <p>Era</p>
+      </div>
+      <div class="col-sm-10">
+        <p>{{ art.era }}</p>
+      </div>
+    </div>
+  {% endif %}
+
+  {% if art.movement %}
+  <div class="row">
+    <div class="col-sm-2">
+      <p>Movement</p>
+    </div>
+    <div class="col-sm-10">
+      {{art.movement | safe}}
+    </div>
+  </div>
+{% endif %}
+
+{% if art.artwork_subject.subject_name %}
+       <div class="row">
+         <div class="col-sm-2">
+           <p>Subject</p>
+         </div>
+         <div class="col-sm-10">
+           <p>{{ art.artwork_subject.subject_name }}</p>
+         </div>
+       </div>
+     {% endif %}
+   
+     {% if art.medium %}
+       <div class="row">
+         <div class="col-sm-2">
+           <p>Medium</p>
+         </div>
+         <div class="col-sm-10">
+           {{ art.medium | safe }}
+         </div>
+       </div>
+     {% endif %}
+   
+     {% if art.artist.artist_last_name and art.artist.artist_first_name%}
+       <div class="row">
+         <div class="col-sm-2">
+           <p>Artist</p>
+         </div>
+         <div class="col-sm-10">
+           {{ art.artist.artist_last_name | safe }}, {{ art.artist.artist_first_name | safe }}
+         </div>
+       </div>
+     {% endif %}
+      {% endblock content %}
+   
+   

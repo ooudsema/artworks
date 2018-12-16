@@ -56,7 +56,7 @@ SET medium_name = IF(medium_name = '', NULL, medium_name);
 CREATE TABLE IF NOT EXISTS artist
   (
     artist_id INTEGER NOT NULL AUTO_INCREMENT UNIQUE,
-    artist_last_name VARCHAR(100),
+    artist_last_name VARCHAR(300),
     artist_first_name VARCHAR(100),
     PRIMARY KEY (artist_id)
   )
@@ -87,7 +87,7 @@ ENGINE=InnoDB
 CHARACTER SET utf8mb4
 COLLATE utf8mb4_0900_ai_ci;
 
-LOAD DATA LOCAL INFILE '/Users/USER/Desktop/artworks/SI664-scripts-master/scripts/subjectsCleaned.csv'
+LOAD DATA LOCAL INFILE '/Users/USER/Desktop/artworks/SI664-scripts-master/scripts/output/subjects_unique.csv'
 INTO TABLE subject
 CHARACTER SET utf8mb4
 FIELDS TERMINATED BY ','
@@ -102,7 +102,7 @@ CREATE TABLE IF NOT EXISTS artwork
   (
     artwork_id INTEGER NOT NULL AUTO_INCREMENT UNIQUE,
     accession_number VARCHAR(250),
-    artwork_title VARCHAR(500) NOT NULL,
+    artwork_title VARCHAR(500),
     artwork_date VARCHAR(200),
     artist_id INTEGER,
     era_id INTEGER,
@@ -133,7 +133,7 @@ COLLATE utf8mb4_0900_ai_ci;
 
 -- CREATE TEMPORARY TABLE temp_art
 
-CREATE TABLE IF NOT EXISTS temp_art
+CREATE TEMPORARY TABLE temp_art
 (
     temp_art_id INTEGER NOT NULL AUTO_INCREMENT UNIQUE,
     tate_art_id INTEGER,
@@ -170,7 +170,7 @@ title = IF(title = '', NULL, title),
 datetext = IF(datetext = '', NULL, datetext),
 medium = IF(medium = '', NULL, medium);
 
-CREATE TABLE IF NOT EXISTS temp_json
+CREATE TEMPORARY TABLE temp_json
 (
     temp_json_id INTEGER NOT NULL AUTO_INCREMENT UNIQUE,
     accession_number VARCHAR(100),
@@ -178,7 +178,7 @@ CREATE TABLE IF NOT EXISTS temp_json
     medium TEXT,
     movement VARCHAR(200),
     era VARCHAR(200),
-    subject TEXT, 
+    subject VARCHAR(250), 
     datetext VARCHAR(250),
     PRIMARY KEY (temp_json_id)
  )
@@ -187,7 +187,7 @@ ENGINE=InnoDB
 CHARACTER SET latin1
 COLLATE latin1_swedish_ci;
 
-LOAD DATA LOCAL INFILE '/Users/USER/Desktop/artworks/SI664-scripts-master/scripts/artworksjson_new.csv'
+LOAD DATA LOCAL INFILE '/Users/USER/Desktop/artworks/SI664-scripts-master/scripts/artworksjson_cleaned.csv'
 INTO TABLE temp_json
 CHARACTER SET latin1
 FIELDS TERMINATED BY ','
@@ -227,41 +227,25 @@ SELECT temp_json.accession_number,
         ON TRIM(medium.medium_name) = TRIM(temp_json.medium)
  ORDER BY artwork.accession_number;
 
-
-CREATE TEMPORARY TABLE numbers
-  (
-    num INTEGER NOT NULL UNIQUE,
-    PRIMARY KEY (num)
-  )
-ENGINE=InnoDB
-CHARACTER SET utf8mb4
-COLLATE utf8mb4_0900_ai_ci;
-
-INSERT IGNORE INTO numbers (num) VALUES
-  (1), (2), (3), (4), (5), (6), (7), (8), (9), (10), (11), (12), (13), (14), (15), (16), (17), (18), (19), (20), (21), (22), (23), (24), (25), (26), (27), (28);
-
--- Create temporary table to store split out states.
-CREATE TABLE subject_list
+CREATE TEMPORARY TABLE subject_list
   (
     id INTEGER NOT NULL AUTO_INCREMENT UNIQUE,
     accession_number VARCHAR(100) NOT NULL,
-    subject_name VARCHAR(255) NOT NULL,
+    subject_name VARCHAR(250) NOT NULL,
     PRIMARY KEY (id)
   )
+
 ENGINE=InnoDB
 CHARACTER SET utf8mb4
 COLLATE utf8mb4_0900_ai_ci;
 
-INSERT IGNORE INTO subject_list (accession_number, subject_name)
-SELECT temp_json.accession_number,
-       SUBSTRING_INDEX(SUBSTRING_INDEX(temp_json.subject, ',', numbers.num), ',', -1)
-       AS subject_name
-  FROM numbers
-       INNER JOIN temp_json
-            ON CHAR_LENGTH(temp_json.subject) -
-              CHAR_LENGTH(REPLACE(temp_json.subject, ',', ''))
-                  >= numbers.num - 1
- ORDER BY temp_json.temp_json_id, numbers.num;
+LOAD DATA LOCAL INFILE '/Users/USER/Desktop/artworks/SI664-scripts-master/scripts/output/artwork_subjects.csv'
+INTO TABLE subject_list
+CHARACTER SET utf8mb4
+FIELDS TERMINATED BY ','
+ENCLOSED BY '"'
+LINES TERMINATED BY '\r\n'
+(accession_number, subject_name);
 
 INSERT IGNORE INTO artwork_subject (artwork_id, subject_id)
 SELECT artwork.artwork_id,
@@ -272,3 +256,5 @@ SELECT artwork.artwork_id,
        LEFT JOIN subject
               ON TRIM(subject_list.subject_name) = TRIM(subject.subject_name)
  ORDER BY subject_list.id;
+
+ DROP TEMPORARY TABLE temp_art, temp_json, subject_list;

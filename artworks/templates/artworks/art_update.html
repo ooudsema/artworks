@@ -1,0 +1,68 @@
+<!-- Restore missing template tags -->
+{% extends 'artworks/base.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+  <header>
+    <h2>Art Update</h2>
+  </header>
+
+  <!-- novalidate attribute required to render validation messages -->
+  <form method="post" novalidate>
+    {% csrf_token %}
+
+    <div class="row">
+      <div class="col-6">
+        {{ form.artwork_title|as_crispy_field }}
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-6">
+        {{ form.artist_last_name|as_crispy_field }}
+      </div>
+    </div>
+
+
+    <!-- Restore missing fields rendered using Bootstrap rows and columns classes --> 
+    <div class="row">
+      <div class="col-6">
+        {{ form.artist_first_name|as_crispy_field }}
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-6">
+        {{ form.era|as_crispy_field }}
+      </div>
+    </div>
+    
+    <div class="row">
+      <div class="col-6">
+        {{ form.medium|as_crispy_field }}
+      </div>
+    </div> 
+
+    <div class="row">
+      <div class="col-6">
+        {{ form.movement|as_crispy_field }}
+      </div>
+    </div>
+
+
+
+    <div class="row">
+      <div class="col-6">
+        {{ form.date|as_crispy_field }}
+      </div>
+    </div>
+
+  <button type="submit" class="btn btn-outline-success">Update</button>
+  
+  <!-- Restore missing button -->
+
+</form>
+
+{% endblock content %}

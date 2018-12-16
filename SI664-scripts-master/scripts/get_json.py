@@ -4,7 +4,7 @@ import json
 files = open("input/csv/artworks/a/a0001.txt")
 csvfile = open('artworksjson.csv', mode='w')
 art_writer = csv.writer(csvfile, delimiter=',')
-#art_writer.writerow(['Title', 'Medium', 'Movement', 'Era', 'Subject', 'Date'])
+art_writer.writerow(['accession','title', 'medium', 'movement', 'era', 'subject', 'date'])
 csvfile2 = open('subjects.csv', mode='w')
 subject_writer = csv.writer(csvfile2, delimiter=',')
 subjectlist = []
@@ -43,7 +43,7 @@ for each in files:
 				for sub in item['children']:
 					subjects.append(sub['name'])
 					if sub['name'] not in subjectlist:
-						subjectlist.append(sub['name'].replace(",", ""))
+						subjectlist.append(sub['name'].replace(",", "").strip())
 	except:
 		subjects = []
 
@@ -58,6 +58,6 @@ for each in files:
 subject = []
 for each in subjectlist:
 	if each not in subject:
-		subject.append(each.replace(",",""))
+		subject.append(each.replace(",","").strip())
 for each in subject:
 	subject_writer.writerow([each])

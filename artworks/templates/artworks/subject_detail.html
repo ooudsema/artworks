@@ -1,0 +1,26 @@
+{% extends 'artworks/base.html' %}
+{% block content %}
+{% if user.is_authenticated %}
+
+<!-- safe filter on for raw HTML stored in database -->
+
+<h2>{{subject.subject_name | safe}}</h2>
+
+{% if subject.subject_name %}
+  <div class="row">
+    <div class="col-sm-2">
+      <p>Subject</p>
+    </div>
+    <div class="col-sm-10">
+      {{subject.subject_name| safe}}
+    </div>
+  </div>
+{% endif %}
+
+
+
+  
+  {% else %}
+    <a href="{% url 'login' %}">Log in</a>
+  {% endif %}
+{% endblock content %}}
