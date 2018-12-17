@@ -66,13 +66,13 @@
   </div>
 {% endif %}
 
-{% if art.artwork_subject.subject_name %}
+{% if art.subject_names %}
        <div class="row">
          <div class="col-sm-2">
            <p>Subject</p>
          </div>
          <div class="col-sm-10">
-           <p>{{ art.artwork_subject.subject_name }}</p>
+           <p>{{ art.subject_names }}</p>
          </div>
        </div>
      {% endif %}

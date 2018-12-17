@@ -64,11 +64,11 @@ class Artwork(models.Model):
 
     @property
     def subject_names(self):
-        subject = self.Artwork.select_related('ArtworkSubject').order_by('artwork_subject.subject_name')
+        subjects = self.subject.order_by('subject.subject_name')
 
         names = []
         for subject in subjects:
-            name = artwork_subject.subject_name
+            name = subject.subject_name
             if name is None:
                 continue
             if name not in names:

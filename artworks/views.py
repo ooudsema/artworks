@@ -9,11 +9,11 @@ from django.urls import reverse, reverse_lazy
 from django_filters.views import FilterView
 from artworks.filters import ArtworkFilter
 
-from .models import Artwork, Subject, Artist
+from .models import Artwork, Subject, Artist, ArtworkSubject
 
 
 def index(request):
-	return HttpResponse("Hello, world. You're at the Tate Gallery Artworkss index page.")
+	return HttpResponse("Hello, world. You're at the Tate Gallery Artworks index page.")
 
 
 class AboutPageView(generic.TemplateView):
@@ -31,7 +31,7 @@ class ArtListView(generic.ListView):
 	paginate_by = 50
 
 	def get_queryset(self):
-		return Artworks.objects.all().select_related('artwork_subject').order_by('artwork_title')
+		return Artwork.objects.all().select_related('artist').order_by('artwork_title')
 
 class ArtDetailView(generic.DetailView):
 	model = Artwork
@@ -46,7 +46,7 @@ class SubjectListView(generic.ListView):
 	paginate_by = 20
 
 	def get_queryset(self):
-		return Subject.objects.all().select_related('artwork_subject').order_by('subject_name')
+		return Subject.objects.all().select_related('artworksubject').order_by('subject_name')
 	
 	def dispatch(self, *args, **kwargs):
 		return super().dispatch(*args, **kwargs)
@@ -69,7 +69,7 @@ class ArtworkCreateView(generic.View):
 	success_message = "Artwork created successfully"
 	template_name = 'artworks/art_new.html'
 	# fields = '__all__' <-- superseded by form_class
-	# success_url = reverse_lazy('heritagesites/site_list')
+	#success_url = reverse_lazy('artworks/art_detail')
 
 	def dispatch(self, *args, **kwargs):
 		return super().dispatch(*args, **kwargs)
@@ -79,15 +79,15 @@ class ArtworkCreateView(generic.View):
 		if form.is_valid():
 			art = form.save(commit=False)
 			art.save()
-			for subject in form.cleaned_data['subject']:
-				Artwork_Subject.objects.create(artwork=art, subject=subject)
-			return redirect(site) # shortcut to object's get_absolute_url()
+			# for subject in form.cleaned_data['subject']:
+			# 	ArtworkSubject.objects.create(artwork=art, subject=subject)
+			return redirect(art) # shortcut to object's get_absolute_url()
 			# return HttpResponseRedirect(site.get_absolute_url())
-		return render(request, 'artwork/site_new.html', {'form': form})
+		return render(request, 'artworks/art_new.html', {'form': form})
 
 	def get(self, request):
 		form = ArtworkForm()
-		return render(request, 'artwork/art_new.html', {'form': form})
+		return render(request, 'artworks/art_new.html', {'form': form})
 
 
 @method_decorator(login_required, name='dispatch')
@@ -96,7 +96,7 @@ class ArtUpdateView(generic.UpdateView):
 	form_class = ArtworkForm
 	# fields = '__all__' <-- superseded by form_class
 	context_object_name = 'art'
-	# pk_url_kwarg = 'site_pk'
+	#pk_url_kwarg = 'art_pk'
 	success_message = "Artwork updated successfully"
 	template_name = 'artworks/art_update.html'
 
@@ -170,4 +170,3 @@ class ArtDeleteView(generic.DeleteView):
 class ArtFilterView(FilterView):
 	filterset_class = ArtworkFilter
 	template_name = 'artworks/art_filter.html'
-	
