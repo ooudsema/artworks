@@ -159,7 +159,7 @@ class ArtDeleteView(generic.DeleteView):
 		self.object = self.get_object()
 
 		# Delete HeritageSiteJurisdiction entries
-		Artwork_Subject.objects \
+		ArtworkSubject.objects \
 			.filter(artwork_id=self.object.artwork_id) \
 			.delete()
 
@@ -170,3 +170,4 @@ class ArtDeleteView(generic.DeleteView):
 class ArtFilterView(FilterView):
 	filterset_class = ArtworkFilter
 	template_name = 'artworks/art_filter.html'
+	context_object_name = 'artworks'

@@ -57,31 +57,27 @@ class ArtworkSerializer(serializers.ModelSerializer):
 		allow_null=True,
 		many=False,
 		write_only=True,
-		queryset=Artist.objects.all(),
-		source='artist'
+		queryset=Artist.objects.all()
 	)
 
 	era = serializers.PrimaryKeyRelatedField(
 		allow_null=True,
 		many=False,
 		write_only=True,
-		queryset=Era.objects.all(),
-		source='era'
+		queryset=Era.objects.all()
 	)
 
 	movement = serializers.PrimaryKeyRelatedField(
 		allow_null=True,
 		many=False,
 		write_only=True,
-		queryset=Movement.objects.all(),
-		source='movement'
+		queryset=Movement.objects.all()
 	)
 	medium = serializers.PrimaryKeyRelatedField(
 		allow_null=True,
 		many=False,
 		write_only=True,
-		queryset=Medium.objects.all(),
-		source='medium'
+		queryset=Medium.objects.all()
 	)
 
 	subject_ids = serializers.PrimaryKeyRelatedField(
