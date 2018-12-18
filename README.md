@@ -59,3 +59,5 @@ setuptools                     40.6.3
 simplejson                     3.16.0  
 
 ```
+
+It also requires a 'secrets.py' file in the 'mysite' directory with the following keys: a django key assigned to the variable SECRET_KEY, a Google Oauth key assigned to the variable SOCIAL_AUTH_GOOGLE_OAUTH2_KEY, and a Google Oauth Secret assigned to the variable SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET. 
