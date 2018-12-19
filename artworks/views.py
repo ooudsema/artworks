@@ -28,7 +28,7 @@ class ArtListView(generic.ListView):
 	model = Artwork
 	context_object_name = 'art'
 	template_name = 'artworks/art.html'
-	paginate_by = 50
+	paginate_by = 100
 
 	def get_queryset(self):
 		return Artwork.objects.all().select_related('artist').order_by('artwork_title')
@@ -109,37 +109,30 @@ class ArtUpdateView(generic.UpdateView):
 		# site.date_updated = timezone.now()
 		art.save()
 
-		# # Current country_area_id values linked to site
-		# old_ids = Artwork_Subject.objects\
-		# 	.values_list('subject_id', flat=True)\
-		# 	.filter(artwork_id=art.artwork_id)
+		old_ids = ArtworkSubject.objects\
+		  	.values_list('subject_id', flat=True)\
+		  	.filter(artwork_id=art.artwork_id)
 
-		# # New countries list
-		# new_subjects = form.cleaned_data['subject']
+		new_subjects = form.cleaned_data['subjects']
 
-		# # TODO can these loops be refactored?
+		new_ids = []
 
-		# # New ids
-		# new_ids = []
+		for subject in new_subjects:
+		 	new_id = subject.subject_id
+		 	new_ids.append(new_id)
+		 	if new_id in old_ids:
+		 		continue
+		 	else:
+		 		ArtworkSubject.objects \
+		 			.create(artwork=art, subject=subject)
 
-		# # Insert new unmatched country entries
-		# for country in new_countries:
-		# 	new_id = country.country_area_id
-		# 	new_ids.append(new_id)
-		# 	if new_id in old_ids:
-		# 		continue
-		# 	else:
-		# 		HeritageSiteJurisdiction.objects \
-		# 			.create(heritage_site=site, country_area=country)
-
-		# # Delete old unmatched country entries
-		# for old_id in old_ids:
-		# 	if old_id in new_ids:
-		# 		continue
-		# 	else:
-		# 		HeritageSiteJurisdiction.objects \
-		# 			.filter(heritage_site_id=site.heritage_site_id, country_area_id=old_id) \
-		# 			.delete()
+		for old_id in old_ids:
+		 	if old_id in new_ids:
+		 		continue
+		 	else:
+		 		ArtworkObject.objects \
+		 			.filter(artwork_id=art.artwork_id, subject_id=old_id) \
+		 			.delete()
 
 		return HttpResponseRedirect(art.get_absolute_url())
 		# return redirect('heritagesites/site_detail', pk=site.pk)
