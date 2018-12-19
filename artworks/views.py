@@ -130,7 +130,7 @@ class ArtUpdateView(generic.UpdateView):
 		 	if old_id in new_ids:
 		 		continue
 		 	else:
-		 		ArtworkObject.objects \
+		 		ArtworkSubject.objects \
 		 			.filter(artwork_id=art.artwork_id, subject_id=old_id) \
 		 			.delete()
 
