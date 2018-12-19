@@ -44,10 +44,10 @@ class Artwork(models.Model):
     accession_number = models.CharField(max_length=250, blank=True, null=True)
     artwork_title = models.CharField(max_length=500, blank=True, null=True)
     artwork_date = models.CharField(max_length=200, blank=True, null=True)
-    artist = models.ForeignKey(Artist, models.DO_NOTHING, blank=True, null=True)
-    era = models.ForeignKey('Era', models.DO_NOTHING, blank=True, null=True)
-    movement = models.ForeignKey('Movement', models.DO_NOTHING, blank=True, null=True)
-    medium = models.ForeignKey('Medium', models.DO_NOTHING, blank=True, null=True)
+    artist = models.ForeignKey(Artist, on_delete=models.PROTECT, blank=True, null=True)
+    era = models.ForeignKey('Era', on_delete=models.PROTECT, blank=True, null=True)
+    movement = models.ForeignKey('Movement', on_delete=models.PROTECT, blank=True, null=True)
+    medium = models.ForeignKey('Medium', on_delete=models.PROTECT, blank=True, null=True)
     subjects = models.ManyToManyField(Subject, through='ArtworkSubject', related_name='artworks')
 
     class Meta:
@@ -79,8 +79,8 @@ class Artwork(models.Model):
 
 class ArtworkSubject(models.Model):
     artwork_subject_id = models.AutoField(primary_key=True)
-    artwork = models.ForeignKey('Artwork', models.DO_NOTHING, blank=True, null=True)
-    subject = models.ForeignKey('Subject', models.DO_NOTHING, blank=True, null=True)
+    artwork = models.ForeignKey('Artwork', on_delete=models.CASCADE, blank=True, null=True)
+    subject = models.ForeignKey('Subject', on_delete=models.CASCADE, blank=True, null=True)
 
     class Meta:
         managed = False

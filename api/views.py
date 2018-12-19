@@ -1,14 +1,14 @@
 from django.shortcuts import render
 
-from artworks.models import Artwork, ArtworkSubject
-from api.serializers import ArtworkSerializer
+from artworks.models import Artwork, ArtworkSubject, Subject
+from api.serializers import SubjectSerializer
 from rest_framework import generics, permissions, status, viewsets
 from rest_framework.response import Response
 
 
 class ArtViewSet(viewsets.ModelViewSet):
-	queryset = Artwork.objects.select_related('ArtworkSubject').order_by('artwork_title')
-	serializer_class = ArtworkSerializer
+	queryset = Subject.objects.order_by('subject_name')
+	serializer_class = SubjectSerializer
 	permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
 	def delete(self, request, pk, format=None):
